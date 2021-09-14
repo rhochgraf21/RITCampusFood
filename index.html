@@ -1,47 +1,10 @@
 <html>
     <head>
         <title>Campus Food</title>
-        <style>
-     
-          /* Adapted from https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
 
-          .campusfood-table {
-                border-collapse: collapse;
-                font-size: 1.6rem;
-                font-family: sans-serif;
-                width: 100%;
-                height: 100%;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            }
-
-            .campusfood-table thead tr {
-                background-color: #b0197e;
-                color: white;
-                text-align: left;
-            }
-
-            .campusfood-table th,
-            .campusfood-table td {
-                padding: 12px 16px;
-            }
-
-            .campusfood-table tbody tr {
-                border-bottom: 1px solid gainsboro;
-            }
-
-            .campusfood-table tbody tr:nth-of-type(even) {
-                background-color: whitesmoke;
-            }
-
-            .campusfood-table tbody tr:last-of-type {
-                border-bottom: 2px solid #b0197e;
-            }
-          
-        </style>
-
+        <link href = "/lightmode.css" id = "stylemode"></link>
         <script>
 
-          // Generates a table's insides at runtime - only tr and td's - given json; Parses out name and busyness info and guesses as to busyness level
             function MakeBusynessTable(json_response) {
 
                 //json_response = JSON.parse(json_response)
@@ -100,14 +63,49 @@
           //fetch the json info from the rit maps api at runtime
             var json_response;
 
-            fetch('https://maps.rit.edu/proxySearch/densityMap.php')
-              .then((response) => {
-                return response.json();
-              })
-              .then((myJson) => {
-                json_response = myJson;
-                MakeBusynessTable(json_response);
-              });
+            function GetJson() {            
+                fetch('https://maps.rit.edu/proxySearch/densityMap.php')
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((myJson) => {
+                    json_response = myJson;
+                    MakeBusynessTable(json_response);
+                  });
+            }
+
+
+
+            function RemoveTable() {
+                var tablebody = document.getElementById("tablebody");
+                while(tablebody.rows.length > 0) {
+                        tablebody.deleteRow(0);
+                }
+            }
+
+            function Update() {
+                RemoveTable();
+                GetJson();
+            }
+
+            Update();            
+            setInterval(Update(), 1800000);
+
+
+            setInterval(ModeUpdater(), 300000);
+
+            function ModeUpdater() {
+                var modeElement = document.getElementById("stylemode");
+                var d = new Date();
+                var time = d.getHours();
+                if(time < 18 && time > 9) {
+
+                    modeElement.setAttribute('href', '/lightmode.css');
+                }
+                else {
+                    modeElement.setAttribute('href', '/darkmode.css');
+                }
+            }
         </script>
 
     </head>
