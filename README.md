@@ -4,7 +4,7 @@
 
 ## Usage
 
-All of the project code that runs on the websiter is contained in this file (just raw html/css/js).
+All of the project code that runs on the website is contained in the index.html file (just raw html/css/js).
 
 The files lightmode.css and darkmode.css are for reference and are not used by the site.
 
